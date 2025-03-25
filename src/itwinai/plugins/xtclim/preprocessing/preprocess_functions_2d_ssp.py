@@ -204,22 +204,21 @@ class PreprocessData(DataGetter):
     @monitor_exec
     def execute(self):
         # #### 1. Load Data to xarrays
-
         atmosfield = []
         for f in self.histo_extr:
             print(f)
             # Historical Datasets
             # regrouped by climate variable
             atmosfield.append(xr.open_dataset(self.dataset_root + "/" + f))
-
+        print("ckpt 0")
         atmosfield_histo = xr.concat(atmosfield, "time")
-
+        print("ckpt 1")
         # Load land-sea mask data
         sftlf = xr.open_dataset(
             f"{self.dataset_root}/sftlf_fx_CESM2_historical_r9i1p1f1_gn.nc",
             chunks={"time": 10},
         )
-
+        print("ckpt 2")
         # #### 2. Restrict to a Geospatial Square
         sq32_world_region = {
             "min_lon": self.min_lon,
