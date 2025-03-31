@@ -211,6 +211,8 @@ class PreprocessData(DataGetter):
             # regrouped by climate variable
             atmosfield.append(xr.open_dataset(self.dataset_root + "/" + f))
         print("ckpt 0")
+        print(len(atmosfield))
+        print(atmosfield[0])
         atmosfield_histo = xr.concat(atmosfield, "time")
         print("ckpt 1")
         # Load land-sea mask data
