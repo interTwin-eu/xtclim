@@ -130,15 +130,14 @@ class SplitPreprocessedData(DataGetter):
 
         # # #### 4. Apply to Projection Datasets
 
-        # for scenario in self.scenarios:
-        #     proj_images = np.load(
-        #         self.input_path + f"/preprocessed_2d_proj{scenario}_data_allssp.npy"
-        #     )
-        #     proj_time = pd.read_csv(self.input_path + "/dates_proj_data.csv")
-
-        #     proj_season_images, proj_season_time = self.season_split(
-        #         images=proj_images,
-        #         time=proj_time,
-        #         dataset_type="proj",
-        #         scenario=scenario,
-        #     )
+        for scenario in self.scenarios:
+            proj_images = np.load(
+                self.input_path + f"/preprocessed_2d_proj{scenario}_data_allssp.npy"
+            )
+            proj_time = pd.read_csv(self.input_path + "/dates_proj_data.csv")
+            proj_season_images, proj_season_time = self.season_split(
+                images=proj_images,
+                time=proj_time,
+                dataset_type="proj",
+                scenario=scenario,
+            )
