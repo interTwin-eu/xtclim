@@ -302,4 +302,5 @@ class PreprocessData(DataGetter):
                 total_proj,
             )
             pd.DataFrame(time_proj).to_csv(self.input_path + "/dates_proj{scenario}_data.csv")
+            print(f"ckpt scenario {scenario}")
         print("ckpt 4")
