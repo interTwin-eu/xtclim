@@ -260,7 +260,7 @@ class PreprocessData(DataGetter):
         # IPCC scenarios: SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5
         # choose among "126", "245", "370", "585"
         # scenario = self.scenario
-
+        print("ckpt 3")
         for scenario in self.scenarios:
             datasets_histo = self.scenario_extr[scenario]
 
@@ -302,3 +302,4 @@ class PreprocessData(DataGetter):
                 total_proj,
             )
             pd.DataFrame(time_proj).to_csv(self.input_path + "/dates_proj{scenario}_data.csv")
+        print("ckpt 4")
