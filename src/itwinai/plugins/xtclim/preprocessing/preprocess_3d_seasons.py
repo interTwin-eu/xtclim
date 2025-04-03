@@ -134,11 +134,13 @@ def preprocess_3d_seasons(config_path="./xtclim.json"):
     )
 
     # #### 4. Apply to Projection Datasets
-
+    print("Projection data")
     for scenario in scenarios:
+        print(f"Projection {scenario} loading...")
         proj_images = np.load(input_path + f"/preprocessed_2d_proj{scenario}_data_allssp.npy")
+        print(f"Projection {scenario} loaded.")
         proj_time = pd.read_csv(input_path + "/dates_proj_data.csv")
-
+        print(f"Projection {scenario} time loaded.")
         proj_season_images, proj_season_time = season_split(
             images=proj_images, time=proj_time, dataset_type="proj", n_memb=n_memb, scenario=scenario, input_path=input_path
         )

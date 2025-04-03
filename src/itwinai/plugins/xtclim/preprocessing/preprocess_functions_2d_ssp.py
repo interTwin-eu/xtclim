@@ -210,15 +210,12 @@ class PreprocessData(DataGetter):
             # Historical Datasets
             # regrouped by climate variable
             atmosfield.append(xr.open_dataset(self.dataset_root + "/" + f))
-        print("ckpt 0")
         atmosfield_histo = xr.concat(atmosfield, "time")
-        print("ckpt 1")
         # Load land-sea mask data
         sftlf = xr.open_dataset(
             f"{self.dataset_root}/sftlf_fx_CESM2_historical_r9i1p1f1_gn.nc",
             chunks={"time": 10},
         )
-        print("ckpt 2")
         # #### 2. Restrict to a Geospatial Square
         sq32_world_region = {
             "min_lon": self.min_lon,
@@ -260,7 +257,6 @@ class PreprocessData(DataGetter):
         # IPCC scenarios: SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5
         # choose among "126", "245", "370", "585"
         # scenario = self.scenario
-        print("ckpt 3")
         for scenario in self.scenarios:
             datasets_histo = self.scenario_extr[scenario]
 
@@ -302,5 +298,3 @@ class PreprocessData(DataGetter):
                 total_proj,
             )
             pd.DataFrame(time_proj).to_csv(self.input_path + f"/dates_proj{scenario}_data.csv")
-            print(f"ckpt scenario {scenario}")
-        print("ckpt 4")
