@@ -283,8 +283,8 @@ class PreprocessData(DataGetter):
             # Here are the results for CMCC-ESM2 (all scenarios)
             # to save time
             # atmosfield_extrema = np.array([234.8754, 327.64])
-            # ssp585 array([234.8754, 327.64  ], dtype=float32)
-            # ssp370 array([234.8754 , 325.43323], dtype=float32)
+            # ssp585 array([234.8754, 327.6400], dtype=float32)
+            # ssp370 array([234.8754, 325.4332], dtype=float32)
             # ssp245 array([234.8754, 324.8263], dtype=float32)
             # ssp126 array([234.8754, 323.6651], dtype=float32)
 
@@ -301,6 +301,6 @@ class PreprocessData(DataGetter):
                 self.input_path + f"/preprocessed_2d_proj{scenario}_data_allssp.npy",
                 total_proj,
             )
-            pd.DataFrame(time_proj).to_csv(self.input_path + "/dates_proj{scenario}_data.csv")
+            pd.DataFrame(time_proj).to_csv(self.input_path + f"/dates_proj{scenario}_data.csv")
             print(f"ckpt scenario {scenario}")
         print("ckpt 4")
