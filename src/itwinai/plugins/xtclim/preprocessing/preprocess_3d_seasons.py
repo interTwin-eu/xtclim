@@ -126,11 +126,11 @@ def preprocess_3d_seasons(config_path="./xtclim.json"):
     # #### 3. Apply to Train and Test Datasets
 
     train_season_images, train_season_time = season_split(
-        train_images, train_time, "train", n_memb, input_path
+        images=train_images, time=train_time, dataset_type="train", n_memb=n_memb, input_path=input_path
     )
 
     test_season_images, test_season_time = season_split(
-        test_images, test_time, "test", n_memb, input_path
+        images=test_images, time=test_time, dataset_type="test", n_memb=n_memb, input_path=input_path
     )
 
     # #### 4. Apply to Projection Datasets
@@ -140,5 +140,6 @@ def preprocess_3d_seasons(config_path="./xtclim.json"):
         proj_time = pd.read_csv(input_path + "/dates_proj_data.csv")
 
         proj_season_images, proj_season_time = season_split(
-            proj_images, proj_time, "proj", n_memb, scenario, input_path
+            images=proj_images, time=proj_time, dataset_type="proj", n_memb=n_memb, scenario=scenario, input_path=input_path
         )
+        print(f"Projection {scenario} done.")
