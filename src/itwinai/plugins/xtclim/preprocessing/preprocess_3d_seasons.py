@@ -124,11 +124,11 @@ def preprocess_3d_seasons(config_path="./xtclim.json"):
         return season_images, season_time
 
     # #### 3. Apply to Train and Test Datasets
-
+    print("Train data")
     train_season_images, train_season_time = season_split(
         images=train_images, time=train_time, dataset_type="train", n_memb=n_memb, input_path=input_path
     )
-
+    print("Train data done.")
     test_season_images, test_season_time = season_split(
         images=test_images, time=test_time, dataset_type="test", n_memb=n_memb, input_path=input_path
     )
