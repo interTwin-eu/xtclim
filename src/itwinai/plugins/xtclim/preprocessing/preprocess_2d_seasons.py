@@ -134,7 +134,7 @@ class SplitPreprocessedData(DataGetter):
             proj_images = np.load(
                 self.input_path + f"/preprocessed_2d_proj{scenario}_data_allssp.npy"
             )
-            proj_time = pd.read_csv(self.input_path + "/dates_proj_data.csv")
+            proj_time = pd.read_csv(self.input_path + f"/dates_proj{scenario}_data.csv")
             proj_season_images, proj_season_time = self.season_split(
                 images=proj_images,
                 time=proj_time,
