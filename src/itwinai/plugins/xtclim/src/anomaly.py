@@ -12,7 +12,7 @@ from itwinai.plugins.xtclim.src.engine import evaluate
 from itwinai.plugins.xtclim.src.initialization import initialization
 
 
-def anomaly(config_path="./xtclim.json", input_path="./input", output_path="./outputs"):
+def anomaly(config_path="./xtclim.json", input_path="./inputs", output_path="./outputs"):
     # Configuration file
     config = cp.ConfigParser()
     config.read(config_path)
