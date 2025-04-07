@@ -1,5 +1,5 @@
 import configparser as cp
-import json
+import yaml
 from operator import add
 
 import numpy as np
@@ -12,14 +12,14 @@ from itwinai.plugins.xtclim.src.engine import evaluate
 from itwinai.plugins.xtclim.src.initialization import initialization
 
 
-def anomaly(config_path="./xtclim.json", input_path="./inputs", output_path="./outputs"):
+def anomaly(config_path="./config.yaml", input_path="./inputs", output_path="./outputs"):
     # Configuration file
     config = cp.ConfigParser()
     config.read(config_path)
 
     # pick the season to study among:
     # '' (none, i.e. full dataset), 'winter_', 'spring_', 'summer_', 'autumn_'
-    seasons = json.loads(config.get("GENERAL", "seasons"))
+    seasons = yaml.loads(config.get("GENERAL", "seasons"))
 
     # choose wether to evaluate train and test data, and/or projections
     past_evaluation = config.get("MODEL", "past_evaluation")
@@ -29,7 +29,7 @@ def anomaly(config_path="./xtclim.json", input_path="./inputs", output_path="./o
     n_avg = config.getint("MODEL", "n_avg")
     # n_avg = 20
 
-    device, criterion, pixel_wise_criterion = initialization(self.config_path)
+    device, criterion, pixel_wise_criterion = initialization()
 
     if past_evaluation:
         for season in seasons:
@@ -103,7 +103,7 @@ def anomaly(config_path="./xtclim.json", input_path="./inputs", output_path="./o
             print("Test average loss:", test_avg_losses)
 
     if future_evaluation:
-        scenarios = json.loads(config.get("GENERAL", "scenarios"))
+        scenarios = yaml.loads(config.get("GENERAL", "scenarios"))
         for season in seasons:
             # load previously trained model
             cvae_model = model.ConvVAE().to(device)
@@ -158,3 +158,6 @@ def anomaly(config_path="./xtclim.json", input_path="./inputs", output_path="./o
                     "for",
                     season[:-1],
                 )
+
+if __name__ == "__main__":
+    anomaly()
