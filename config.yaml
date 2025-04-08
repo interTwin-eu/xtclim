@@ -100,10 +100,6 @@ MODEL:
   # Number of evaluations for each dataset
   n_avg: 20
 
-  # Choose whether to evaluate train and test data, and/or projections
-  past_evaluation: False
-  future_evaluation: True
-
   # Anomaly detection threshold (percentile)
   anomaly_percent: 99
 
@@ -144,6 +140,19 @@ training_pipeline:
       early_count: ${TRAIN.early_count}
       old_valid_loss: ${TRAIN.old_valid_loss}
       min_valid_epoch_loss: ${TRAIN.min_valid_epoch_loss}
+      # Model parameters
+      kernel_size: ${MODEL.kernel_size}
+      init_channels: ${MODEL.init_channels}
+      image_channels: ${MODEL.image_channels}
+      latent_dim: ${MODEL.latent_dim}
+    inference-step:
+      _target_: itwinai.plugins.xtclim.src.trainer.TorchInference
+      input_path: ${GENERAL.input_path}
+      output_path: ${GENERAL.output_path}
+      seasons: ${GENERAL.seasons}
+      n_memb: ${TRAIN.n_memb}
+      beta: ${MODEL.beta}
+      batch_size: ${TRAIN.batch_size}
       # Model parameters
       kernel_size: ${MODEL.kernel_size}
       init_channels: ${MODEL.init_channels}
