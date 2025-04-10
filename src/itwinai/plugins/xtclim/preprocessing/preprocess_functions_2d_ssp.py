@@ -258,11 +258,11 @@ class PreprocessData(DataGetter):
         # choose among "126", "245", "370", "585"
         # scenario = self.scenario
         for scenario in self.scenarios:
-            datasets_histo = self.scenario_extr[scenario]
+            dataset = self.scenario_extr[scenario]
 
             atmosfield = []
             # for f in datasets_proj:
-            for f in datasets_histo:
+            for f in dataset:
                 # SSP Datasets
                 # regrouped by climate variable
                 atmosfield.append(xr.open_dataset(self.dataset_root + "/" + f))
