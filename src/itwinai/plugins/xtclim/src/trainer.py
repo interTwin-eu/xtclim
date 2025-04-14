@@ -216,7 +216,7 @@ class TorchInference(Trainer):
                 )
                 n_proj = len(projection_data)
                 projset = [
-                    (torch.from_numpy(np.reshape(projection_data[i], (2, 32, 32))), projection_time[i, 0])
+                    (torch.from_numpy(np.reshape(projection_data[i], (2, 32, 32))), projection_time.iloc[i, 0])
                     for i in range(n_proj)
                 ]
                 dataloader = DataLoader(projset, batch_size=self.batch_size, shuffle=False)
