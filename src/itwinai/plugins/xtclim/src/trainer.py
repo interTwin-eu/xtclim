@@ -220,7 +220,7 @@ class TorchInference(Trainer):
                 dataloader = DataLoader(projset, batch_size=self.batch_size, shuffle=False)
                 print(f"ckpt 3 {season}{scenario}")
                 # Run evaluation
-                loss, recon_images = evaluate(
+                val_loss, recon_images, losses, pixel_wise_losses = evaluate(
                     inference_model, dataloader, projset, device, criterion, pixel_wise_criterion
                 )
                 print(f"ckpt 4 {season}{scenario}")
