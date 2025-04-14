@@ -229,8 +229,8 @@ class TorchInference(Trainer):
                     f"{self.output_path}/proj_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
                 )                
                 # Optionally, save reconstructed images
-                image_grid = make_grid(recon_images.detach().cpu())
-                torch.save(image_grid, f"{self.output_path}/reconstructed_grid_{season}.pt")
+                # image_grid = make_grid(recon_images.detach().cpu())
+                # torch.save(image_grid, f"{self.output_path}/reconstructed_grid_{season}.pt")
                 # Ou bien, enregistrer en image avec matplotlib ou PIL
 
                 # Optional: Save loss plot for visual reference
