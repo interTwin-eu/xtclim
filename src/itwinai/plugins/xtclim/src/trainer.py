@@ -210,8 +210,9 @@ class TorchInference(Trainer):
                 projection_data = np.load(
                     f"{self.input_path}/preprocessed_1d_proj{scenario}_{season}_data_{self.n_memb}memb.npy"
                 )
+                print(projection_data.shape)
                 projection_time = pd.read_csv(
-                    f"{self.input_path}/dates_proj_{season}_data.csv"
+                    f"{self.input_path}/dates_proj_{season}_data_{self.n_memb}memb.csv"
                 )
                 n_proj = len(projection_data)
                 projset = [
