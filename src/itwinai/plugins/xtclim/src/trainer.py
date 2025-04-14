@@ -186,7 +186,6 @@ class TorchInference(Trainer):
     @monitor_exec
     def execute(self):
         device, criterion, pixel_wise_criterion = initialization()
-        print("ckpt 0")
         for season in self.seasons:
             print(f"Running inference for season: {season}")
             # Load pre-trained model
@@ -196,7 +195,6 @@ class TorchInference(Trainer):
                 image_channels=self.image_channels,
                 latent_dim=self.latent_dim,
             ).to(device)
-            print(f"ckpt 1 {season}")
             model_path = f"{self.output_path}/cvae_model_{season}_1d_{self.n_memb}memb.pth"
             inference_model.load_state_dict(torch.load(model_path))
             inference_model.eval()
@@ -204,7 +202,6 @@ class TorchInference(Trainer):
             for scenario in self.scenarios:
 
                 # Load projection data (future climate data)
-                print(f"ckpt 2 {season}{scenario}")
                 projection_data = np.load(
                     f"{self.input_path}/preprocessed_1d_proj{scenario}_{season}_data_{self.n_memb}memb.npy"
                 )
@@ -218,12 +215,10 @@ class TorchInference(Trainer):
                     for i in range(n_proj)
                 ]
                 dataloader = DataLoader(projset, batch_size=self.batch_size, shuffle=False)
-                print(f"ckpt 3 {season}{scenario}")
                 # Run evaluation
                 val_loss, recon_images, losses, pixel_wise_losses = evaluate(
                     inference_model, dataloader, projset, device, criterion, pixel_wise_criterion
                 )
-                print(f"ckpt 4 {season}{scenario}")
                 # Save anomaly score (loss) per timestep
                 pd.DataFrame(losses).to_csv(
                     f"{self.output_path}/proj_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
