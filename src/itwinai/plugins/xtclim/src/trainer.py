@@ -225,16 +225,21 @@ class TorchInference(Trainer):
                 )
                 print(f"ckpt 4 {season}{scenario}")
                 # Save anomaly score (loss) per timestep
-                pd.DataFrame(loss).to_csv(
-                    f"{self.output_path}/proj_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
+                pd.DataFrame(val_loss).to_csv(
+                    f"{self.output_path}/proj_val_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
                 )
-
+                pd.DataFrame(losses).to_csv(
+                    f"{self.output_path}/proj_losses_indiv_{season}_1d_{self.n_memb}memb.csv"
+                )
+                pd.DataFrame(pixel_wise_losses).to_csv(
+                    f"{self.output_path}/proj_pixel_wise_losses_indiv_{season}_1d_{self.n_memb}memb.csv"
+                )
                 # Optionally, save reconstructed images
                 image_grid = make_grid(recon_images.detach().cpu())
                 torch.save(image_grid, f"{self.output_path}/reconstructed_grid_{season}.pt")
                 # Ou bien, enregistrer en image avec matplotlib ou PIL
 
                 # Optional: Save loss plot for visual reference
-                save_loss_plot([], loss, season, self.output_path)
+                save_loss_plot([], losses, season, self.output_path)
 
                 print(f"Saved inference results for {season}")
