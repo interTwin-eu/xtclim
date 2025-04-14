@@ -221,7 +221,7 @@ class TorchInference(Trainer):
                 )
                 # Save anomaly score (loss) per timestep
                 pd.DataFrame(losses).to_csv(
-                    f"{self.output_path}/proj_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
+                    f"{self.output_path}/proj{scenario}_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
                 )                
                 # Optionally, save reconstructed images
                 # image_grid = make_grid(recon_images.detach().cpu())
