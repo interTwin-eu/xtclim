@@ -137,9 +137,6 @@ training_pipeline:
       n_avg: ${MODEL.n_avg}
       stop_delta: ${TRAIN.stop_delta}
       patience: ${TRAIN.patience}
-      early_count: ${TRAIN.early_count}
-      old_valid_loss: ${TRAIN.old_valid_loss}
-      min_valid_epoch_loss: ${TRAIN.min_valid_epoch_loss}
       # Model parameters
       kernel_size: ${MODEL.kernel_size}
       init_channels: ${MODEL.init_channels}
@@ -151,7 +148,6 @@ training_pipeline:
       output_path: ${GENERAL.output_path}
       seasons: ${GENERAL.seasons}
       n_memb: ${TRAIN.n_memb}
-      beta: ${MODEL.beta}
       batch_size: ${TRAIN.batch_size}
       # Model parameters
       kernel_size: ${MODEL.kernel_size}

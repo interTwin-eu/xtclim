@@ -164,7 +164,6 @@ class TorchInference(Trainer):
         scenarios: List[str],
         seasons: List[str],
         n_memb: int = 1,
-        beta: float = 0.1,
         batch_size: int = 64,
         kernel_size: int = 4,
         init_channels: int = 8,
@@ -177,7 +176,6 @@ class TorchInference(Trainer):
         self.scenarios = scenarios
         self.seasons = seasons
         self.n_memb = n_memb
-        self.beta = beta
         self.batch_size = batch_size
         # Model parameters
         self.kernel_size = kernel_size
@@ -187,7 +185,7 @@ class TorchInference(Trainer):
 
     @monitor_exec
     def execute(self):
-        device, criterion, _ = initialization()
+        device, criterion, pixel_wise_criterion = initialization()
         print("ckpt 0")
         for season in self.seasons:
             print(f"Running inference for season: {season}")
@@ -223,7 +221,7 @@ class TorchInference(Trainer):
                 print(f"ckpt 3 {season}{scenario}")
                 # Run evaluation
                 loss, recon_images = evaluate(
-                    inference_model, dataloader, projset, device, criterion, self.beta
+                    inference_model, dataloader, projset, device, criterion, pixel_wise_criterion
                 )
                 print(f"ckpt 4 {season}{scenario}")
                 # Save anomaly score (loss) per timestep
