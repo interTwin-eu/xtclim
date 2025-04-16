@@ -164,7 +164,6 @@ class TorchInference(Trainer):
         scenarios: List[str],
         seasons: List[str],
         n_memb: int = 1,
-        batch_size: int = 64,
         kernel_size: int = 4,
         init_channels: int = 8,
         image_channels: int = 2,
@@ -176,7 +175,6 @@ class TorchInference(Trainer):
         self.scenarios = scenarios
         self.seasons = seasons
         self.n_memb = n_memb
-        self.batch_size = batch_size
         # Model parameters
         self.kernel_size = kernel_size
         self.init_channels = init_channels
@@ -214,7 +212,7 @@ class TorchInference(Trainer):
                     (torch.from_numpy(np.reshape(projection_data[i], (2, 32, 32))), projection_time.iloc[i, 0])
                     for i in range(n_proj)
                 ]
-                dataloader = DataLoader(projset, batch_size=self.batch_size, shuffle=False)
+                dataloader = DataLoader(projset, batch_size=1, shuffle=False)
                 # Run evaluation
                 val_loss, recon_images, losses, pixel_wise_losses = evaluate(
                     inference_model, dataloader, projset, device, criterion, pixel_wise_criterion
