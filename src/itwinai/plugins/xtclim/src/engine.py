@@ -47,10 +47,18 @@ def train(model, dataloader, dataset, device, optimizer, criterion, beta):
         bce_loss = criterion(reconstruction, data)
         # total loss = reconstruction loss + KL divergence
         loss = final_loss(bce_loss, mu, logvar, beta)
-        losses.append(loss.item())
         loss.backward()  # backpropagate loss to learn from mistakes
         running_loss += loss.item()
         optimizer.step()
+    for i, data in tqdm(
+        enumerate(dataloader), total=int(len(dataset))
+    ):
+        data = data[0]
+        data = data.to(device)
+        optimizer.zero_grad()
+        reconstruction, _, _ = model(data)
+        loss = criterion(reconstruction, data)
+        losses.append(loss.item())
     train_loss = running_loss / counter  # average loss over the batches
     return train_loss, losses
 
@@ -82,11 +90,18 @@ def validate(model, dataloader, dataset, device, criterion, beta):
             reconstruction, mu, logvar = model(data)
             bce_loss = criterion(reconstruction, data)
             loss = final_loss(bce_loss, mu, logvar, beta)
-            losses.append(loss.item())
             running_loss += loss.item()
             # save the last batch input and output of every epoch
             if i == int(len(dataset) / dataloader.batch_size) - 1:
                 recon_images = reconstruction
+        for i, data in tqdm(
+            enumerate(dataloader), total=int(len(dataset))
+        ):
+            data = data[0]
+            data = data.to(device)
+            reconstruction, _, _ = model(data)
+            loss = criterion(reconstruction, data)
+            losses.append(loss.item())
     val_loss = running_loss / counter
     return val_loss, recon_images, losses
 
