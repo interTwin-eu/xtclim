@@ -109,11 +109,11 @@ class TorchTrainer(Trainer):
                 print(f"Epoch {epoch + 1}/{self.epochs}")
 
                 # Train for one epoch
-                train_epoch_loss = train(cvae_model, trainloader, trainset, device, optimizer, criterion, self.beta)
+                train_epoch_loss, _ = train(cvae_model, trainloader, trainset, device, optimizer, criterion, self.beta)
                 train_loss.append(train_epoch_loss)
 
                 # Validate after training
-                valid_epoch_loss, recon_images = validate(cvae_model, testloader, testset, device, criterion, self.beta)
+                valid_epoch_loss, recon_images, _ = validate(cvae_model, testloader, testset, device, criterion, self.beta)
                 valid_loss.append(valid_epoch_loss)
 
                 # Save best model and losses
