@@ -47,7 +47,7 @@ def train(model, dataloader, dataset, device, optimizer, criterion, beta):
         bce_loss = criterion(reconstruction, data)
         # total loss = reconstruction loss + KL divergence
         loss = final_loss(bce_loss, mu, logvar, beta)
-        losses = losses.append(loss.item())
+        losses.append(loss.item())
         loss.backward()  # backpropagate loss to learn from mistakes
         running_loss += loss.item()
         optimizer.step()
@@ -82,7 +82,7 @@ def validate(model, dataloader, dataset, device, criterion, beta):
             reconstruction, mu, logvar = model(data)
             bce_loss = criterion(reconstruction, data)
             loss = final_loss(bce_loss, mu, logvar, beta)
-            losses = losses.append(loss.item())
+            losses.append(loss.item())
             running_loss += loss.item()
             # save the last batch input and output of every epoch
             if i == int(len(dataset) / dataloader.batch_size) - 1:
