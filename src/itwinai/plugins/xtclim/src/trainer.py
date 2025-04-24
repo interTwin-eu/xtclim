@@ -147,6 +147,14 @@ class TorchTrainer(Trainer):
                     else:
                         early_count = 0
 
+            _, train_losses = train(cvae_model, trainloader, trainset, device, optimizer, criterion, self.beta)
+            _, _, val_losses = validate(cvae_model, testloader, testset, device, criterion, self.beta)
+            pd.DataFrame(train_loss).to_csv(
+                f"{self.output_path}/infer_train_loss_{season}_1d_{self.n_memb}memb.csv", index=False
+            )
+            pd.DataFrame(valid_loss).to_csv(
+                f"{self.output_path}/infer_test_loss_{season}_1d_{self.n_memb}memb.csv", index=False
+            )
             # Save final reconstructed image grid
             image_grid = make_grid(recon_images.detach().cpu())
             # Optionally save image grid if needed
