@@ -41,6 +41,7 @@ class PreprocessData(DataGetter):
         input_path: str,
         output_path: str,
         histo_extr: List[str],
+        landsea_mask: str,
         min_lon: float,
         max_lon: float,
         min_lat: float,
@@ -53,6 +54,7 @@ class PreprocessData(DataGetter):
         self.input_path = input_path
         self.output_path = output_path
         self.histo_extr = histo_extr
+        self.landsea_mask = landsea_mask
         self.min_lon = min_lon
         self.max_lon = max_lon
         self.min_lat = min_lat
@@ -213,7 +215,7 @@ class PreprocessData(DataGetter):
         atmosfield_histo = xr.concat(atmosfield, "time")
         # Load land-sea mask data
         sftlf = xr.open_dataset(
-            f"{self.dataset_root}/sftlf_fx_CESM2_historical_r9i1p1f1_gn.nc",
+            f"{self.dataset_root}/{self.landsea_mask}",
             chunks={"time": 10},
         )
         # #### 2. Restrict to a Geospatial Square
