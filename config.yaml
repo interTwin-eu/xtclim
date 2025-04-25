@@ -1,21 +1,25 @@
 # General configuration
+
 GENERAL:
   # Pick the season to study among:
   # "" (none, i.e. full dataset), "winter", "spring", "summer", "autumn"
   seasons: ["winter", "spring", "summer", "autumn"]
 
   # SSP scenarios
-  # scenarios = [585, 370, 245, 126]
-  scenarios: [245]
+  # scenarios: [585, 370, 245, 126]
+  scenarios: [585, 245]
+
+  # Choose whether to evaluate train and test data, and/or projections
+  on_train_test: False
 
   # Data directory
-  dataset_root: /Users/page/Documents/projets/interTwin/xtclim_env/data
+  dataset_root: /ceph/hpc/home/ciangottinid/dataset
 
   # Input path
-  input_path: /Users/page/Documents/projets/interTwin/xtclim_env/input
+  input_path: /ceph/hpc/home/ciangottinid/inputs
 
   # Output path
-  output_path: /Users/page/Documents/projets/interTwin/xtclim_env/outputs
+  output_path: /ceph/hpc/home/ciangottinid/outputs
 
   # Variable
   var_extr: tasmax
@@ -67,7 +71,7 @@ TRAIN:
   # Initialize learning parameters
   lr0: 0.001
   batch_size: 10 # batch_size = 64 (alternative option)
-  epochs: 3 # epochs = 100 (alternative option)
+  epochs: 100 # epochs = 100 (alternative option)
   strategy: ddp
 
   # Early stopping parameters
@@ -113,6 +117,7 @@ training_pipeline:
       input_path: ${GENERAL.input_path}
       output_path: ${GENERAL.output_path}
       histo_extr: ${GENERAL.histo_extr}
+      landsea_mask: ${GENERAL.landsea_mask}
       min_lon: ${GENERAL.min_lon}
       max_lon: ${GENERAL.max_lon}
       min_lat: ${GENERAL.min_lat}
@@ -146,9 +151,10 @@ training_pipeline:
       _target_: itwinai.plugins.xtclim.src.trainer.TorchInference
       input_path: ${GENERAL.input_path}
       output_path: ${GENERAL.output_path}
+      scenarios: ${GENERAL.scenarios}
       seasons: ${GENERAL.seasons}
       n_memb: ${TRAIN.n_memb}
-      batch_size: ${TRAIN.batch_size}
+      on_train_test: ${GENERAL.on_train_test}
       # Model parameters
       kernel_size: ${MODEL.kernel_size}
       init_channels: ${MODEL.init_channels}
