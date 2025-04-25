@@ -109,11 +109,11 @@ class TorchTrainer(Trainer):
                 print(f"Epoch {epoch + 1}/{self.epochs}")
 
                 # Train for one epoch
-                train_epoch_loss, _ = train(cvae_model, trainloader, trainset, device, optimizer, criterion, self.beta)
+                train_epoch_loss = train(cvae_model, trainloader, trainset, device, optimizer, criterion, self.beta)
                 train_loss.append(train_epoch_loss)
 
                 # Validate after training
-                valid_epoch_loss, recon_images, _ = validate(cvae_model, testloader, testset, device, criterion, self.beta)
+                valid_epoch_loss, recon_images = validate(cvae_model, testloader, testset, device, criterion, self.beta)
                 valid_loss.append(valid_epoch_loss)
 
                 # Save best model and losses
@@ -125,10 +125,10 @@ class TorchTrainer(Trainer):
                     )
                     save_loss_plot(train_loss, valid_loss, season, self.output_path)
                     pd.DataFrame(train_loss).to_csv(
-                        f"{self.output_path}/train_loss_indiv_{season}_1d_{self.n_memb}memb.csv", index=False
+                        f"{self.output_path}/train_loss_per_epoch_indiv_{season}_1d_{self.n_memb}memb.csv", index=False
                     )
                     pd.DataFrame(valid_loss).to_csv(
-                        f"{self.output_path}/test_loss_indiv_{season}_1d_{self.n_memb}memb.csv", index=False
+                        f"{self.output_path}/test_loss_per_epoch_indiv_{season}_1d_{self.n_memb}memb.csv", index=False
                     )
 
                 # Learning rate decay
@@ -146,15 +146,6 @@ class TorchTrainer(Trainer):
                             break
                     else:
                         early_count = 0
-
-            _, train_losses = train(cvae_model, trainloader, trainset, device, optimizer, criterion, self.beta)
-            _, _, val_losses = validate(cvae_model, testloader, testset, device, criterion, self.beta)
-            pd.DataFrame(train_losses).to_csv(
-                f"{self.output_path}/infer_train_loss_{season}_1d_{self.n_memb}memb.csv", index=False
-            )
-            pd.DataFrame(val_losses).to_csv(
-                f"{self.output_path}/infer_test_loss_{season}_1d_{self.n_memb}memb.csv", index=False
-            )
             # Save final reconstructed image grid
             image_grid = make_grid(recon_images.detach().cpu())
             # Optionally save image grid if needed
@@ -171,6 +162,7 @@ class TorchInference(Trainer):
         output_path: str,
         scenarios: List[str],
         seasons: List[str],
+        on_train_test: bool = False,
         n_memb: int = 1,
         kernel_size: int = 4,
         init_channels: int = 8,
@@ -183,6 +175,7 @@ class TorchInference(Trainer):
         self.scenarios = scenarios
         self.seasons = seasons
         self.n_memb = n_memb
+        self.on_train_test = on_train_test
         # Model parameters
         self.kernel_size = kernel_size
         self.init_channels = init_channels
@@ -205,36 +198,72 @@ class TorchInference(Trainer):
             inference_model.load_state_dict(torch.load(model_path))
             inference_model.eval()
             
-            for scenario in self.scenarios:
+            if self.on_train_test:
 
-                # Load projection data (future climate data)
-                projection_data = np.load(
-                    f"{self.input_path}/preprocessed_1d_proj{scenario}_{season}_data_{self.n_memb}memb.npy"
-                )
-                print(projection_data.shape)
-                projection_time = pd.read_csv(
-                    f"{self.input_path}/dates_proj_{season}_data_{self.n_memb}memb.csv"
-                )
-                n_proj = len(projection_data)
-                projset = [
-                    (torch.from_numpy(np.reshape(projection_data[i], (2, 32, 32))), projection_time.iloc[i, 0])
-                    for i in range(n_proj)
+                # Load training data
+                train_data = np.load(f"{self.input_path}/preprocessed_1d_train_{season}_data_{self.n_memb}memb.npy")
+                train_time = pd.read_csv(f"{self.input_path}/dates_train_{season}_data_{self.n_memb}memb.csv")
+                trainset = [
+                    (torch.from_numpy(np.reshape(train_data[i], (2, 32, 32))), train_time.iloc[i, 0])
+                    for i in range(len(train_data))
                 ]
-                dataloader = DataLoader(projset, batch_size=1, shuffle=False)
+                dataloader = DataLoader(trainset, batch_size=1, shuffle=False)
                 # Run evaluation
                 val_loss, recon_images, losses, pixel_wise_losses = evaluate(
-                    inference_model, dataloader, projset, device, criterion, pixel_wise_criterion
+                    inference_model, dataloader, trainset, device, criterion, pixel_wise_criterion
                 )
                 # Save anomaly score (loss) per timestep
                 pd.DataFrame(losses).to_csv(
-                    f"{self.output_path}/proj{scenario}_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
-                )                
-                # Optionally, save reconstructed images
-                # image_grid = make_grid(recon_images.detach().cpu())
-                # torch.save(image_grid, f"{self.output_path}/reconstructed_grid_{season}.pt")
-                # Ou bien, enregistrer en image avec matplotlib ou PIL
+                    f"{self.output_path}/train_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
+                )
 
-                # Optional: Save loss plot for visual reference
-                save_loss_plot([], losses, season, self.output_path)
-                print("val_loss = ", val_loss)
-                print(f"Saved inference results for {season}")
+                test_data = np.load(f"{self.input_path}/preprocessed_1d_test_{season}_data_{self.n_memb}memb.npy")
+                test_time = pd.read_csv(f"{self.input_path}/dates_test_{season}_data_{self.n_memb}memb.csv")
+                testset = [
+                    (torch.from_numpy(np.reshape(test_data[i], (2, 32, 32))), test_time.iloc[i, 0])
+                    for i in range(len(test_data))
+                ]
+                dataloader = DataLoader(testset, batch_size=1, shuffle=False)
+                # Run evaluation
+                val_loss, recon_images, losses, pixel_wise_losses = evaluate(
+                    inference_model, dataloader, testset, device, criterion, pixel_wise_criterion
+                )
+                # Save anomaly score (loss) per timestep
+                pd.DataFrame(losses).to_csv(
+                    f"{self.output_path}/test_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
+                )
+
+            else:
+                for scenario in self.scenarios:
+
+                    # Load projection data (future climate data)
+                    projection_data = np.load(
+                        f"{self.input_path}/preprocessed_1d_proj{scenario}_{season}_data_{self.n_memb}memb.npy"
+                    )
+                    print(projection_data.shape)
+                    projection_time = pd.read_csv(
+                        f"{self.input_path}/dates_proj_{season}_data_{self.n_memb}memb.csv"
+                    )
+                    n_proj = len(projection_data)
+                    projset = [
+                        (torch.from_numpy(np.reshape(projection_data[i], (2, 32, 32))), projection_time.iloc[i, 0])
+                        for i in range(n_proj)
+                    ]
+                    dataloader = DataLoader(projset, batch_size=1, shuffle=False)
+                    # Run evaluation
+                    val_loss, recon_images, losses, pixel_wise_losses = evaluate(
+                        inference_model, dataloader, projset, device, criterion, pixel_wise_criterion
+                    )
+                    # Save anomaly score (loss) per timestep
+                    pd.DataFrame(losses).to_csv(
+                        f"{self.output_path}/proj{scenario}_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
+                    )                
+                    # Optionally, save reconstructed images
+                    # image_grid = make_grid(recon_images.detach().cpu())
+                    # torch.save(image_grid, f"{self.output_path}/reconstructed_grid_{season}.pt")
+                    # Ou bien, enregistrer en image avec matplotlib ou PIL
+
+                    # Optional: Save loss plot for visual reference
+                    save_loss_plot([], losses, season, self.output_path)
+                    print("val_loss = ", val_loss)
+            print(f"Saved inference results for {season}")
