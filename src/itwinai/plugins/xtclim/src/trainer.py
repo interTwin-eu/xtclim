@@ -165,6 +165,7 @@ class TorchTrainer(Trainer):
         # emissions = tracker.stop()
         # print(f"Emissions from this training run: {emissions:.5f} kg CO2eq")
 
+
 class TorchInference(Trainer):
     def __init__(
         self,
@@ -275,10 +276,12 @@ class TorchInference(Trainer):
                     # Save anomaly score (loss) per timestep
                     pd.DataFrame(losses).to_csv(
                         f"{self.output_path}/proj{scenario}_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
-                    )                
+                    )
                     # Optionally, save reconstructed images
                     # image_grid = make_grid(recon_images.detach().cpu())
-                    # torch.save(image_grid, f"{self.output_path}/reconstructed_grid_{season}.pt")
+                    # torch.save(
+                    # image_grid, f"{self.output_path}/reconstructed_grid_{season}.pt"
+                    # )
                     # Ou bien, enregistrer en image avec matplotlib ou PIL
 
                     # Optional: Save loss plot for visual reference
