@@ -128,9 +128,10 @@ RUN set -eux; \
         \
         apt-get install git
 
-RUN set -eux; \
-        \
-        pip install torch xarray tqdm itwinai cftime torchvision imageio netcdf4 dask
+COPY pyproject.toml .
+COPY src/ ./src/
+RUN pip install .          
+# installe tout via pyproject.toml
 
 #RUN set -eux; \
 #        \

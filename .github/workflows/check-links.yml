@@ -19,7 +19,11 @@ jobs:
           # ref: ${{ github.event.pull_request.head.sha }}
           # Full git history needed to get proper list of changed files
           fetch-depth: 0
-
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install .
+      - name: Run tests
+        run: pytest
       - name: Check links on new changes
         uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
