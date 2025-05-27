@@ -29,7 +29,7 @@ dependencies = [
     "tqdm>=4.67.1",
     "urllib3>=1.26.13",
     "xarray>=2025.1.2",
-    "torch>=2.7.0"
+    "torch>=2.7.0",
     "torchvision>=0.18.0"
 ]
 
