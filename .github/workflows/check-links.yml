@@ -1,10 +1,9 @@
----
 name: Check links and run tests with coverage
 
 on:
   push:
   pull_request:
-  
+
 permissions:
   contents: read
   actions: read
@@ -44,5 +43,3 @@ jobs:
           use-quiet-mode: "yes"
           use-verbose-mode: "yes"
           base-branch: "main"
-
-

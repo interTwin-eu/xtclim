@@ -5,6 +5,7 @@ FROM buildpack-deps:bookworm
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Configuration des variables d'environnement
+# gitleaks:allow
 ARG GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D
 ARG PYTHON_VERSION=3.10.14
 ARG PYTHON_PIP_VERSION=23.0.1
