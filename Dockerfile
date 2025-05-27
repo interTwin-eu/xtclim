@@ -29,10 +29,9 @@ RUN apt-get update && \
         curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Répertoire de travail
-WORKDIR /app
+# Répertoire de travail temporaire pour la compilation de Python
+WORKDIR /usr/src/python
 
-# Téléchargement, vérification et compilation de Python
 RUN wget --progress=dot:giga -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" && \
     wget --progress=dot:giga -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" && \
     GNUPGHOME="$(mktemp -d)" && \
@@ -40,10 +39,8 @@ RUN wget --progress=dot:giga -O python.tar.xz "https://www.python.org/ftp/python
     gpg --batch --verify python.tar.xz.asc python.tar.xz && \
     gpgconf --kill all && \
     rm -rf "$GNUPGHOME" python.tar.xz.asc && \
-    mkdir -p /usr/src/python && \
-    tar -xJf python.tar.xz -C /usr/src/python --strip-components=1 && \
+    tar -xJf python.tar.xz --strip-components=1 && \
     rm python.tar.xz && \
-    cd /usr/src/python && \
     ./configure \
         --enable-loadable-sqlite-extensions \
         --enable-optimizations \
@@ -54,8 +51,10 @@ RUN wget --progress=dot:giga -O python.tar.xz "https://www.python.org/ftp/python
         --without-ensurepip && \
     make -j"$(nproc)" && \
     make install && \
-    ldconfig && \
-    cd / && rm -rf /usr/src/python
+    ldconfig
+
+WORKDIR /
+RUN rm -rf /usr/src/python
 
 # Symlinks : python, idle, pydoc, etc.
 RUN for bin in idle3 pydoc3 python3 python3-config; do \

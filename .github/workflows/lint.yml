@@ -5,19 +5,19 @@ on:
   push:
   pull_request:
 
+############################################
+# Grant status permission for MULTI_STATUS #
+############################################
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+  actions: read
+
 jobs:
   super-lint:
     name: Lint with Super-Linter
     runs-on: ubuntu-latest
-
-    ############################################
-    # Grant status permission for MULTI_STATUS #
-    ############################################
-    permissions:
-      contents: read
-      packages: read
-      statuses: write
-      actions: read
 
     steps:
       # Checks out a copy of your repository on the ubuntu-latest machine

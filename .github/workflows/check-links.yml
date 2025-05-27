@@ -4,15 +4,15 @@ name: Check links and run tests with coverage
 on:
   push:
   pull_request:
+  
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   check-code-and-links:
     name: Run tests and check markdown links
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      actions: read
 
     steps:
       - name: Checkout code
