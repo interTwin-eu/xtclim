@@ -1,6 +1,8 @@
-import xarray as xr
 import numpy as np
+import xarray as xr
+
 from itwinai.plugins.xtclim.src.trainer import TorchInference
+
 
 def test_torch_inference_synthetic(tmp_path):
     # Simulated inference input

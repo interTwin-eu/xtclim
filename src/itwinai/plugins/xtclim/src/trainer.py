@@ -84,29 +84,11 @@ class TorchTrainer(Trainer):
             optimizer = optim.Adam(cvae_model.parameters(), lr=self.lr)
 
             # Load training data
-            train_data = np.load(
-                f"{self.input_path}/preprocessed_1d_train_{season}_data_{self.n_memb}memb.npy"
-            )
-            train_time = pd.read_csv(
-                f"{self.input_path}/dates_train_{season}_data_{self.n_memb}memb.csv"
-            )
-            trainset = [
-                (torch.from_numpy(np.reshape(train_data[i], (2, 32, 32))), train_time.iloc[i, 0])
-                for i in range(len(train_data))
-            ]
+            trainset = self.load_dataset("train", season)
             trainloader = DataLoader(trainset, batch_size=self.batch_size, shuffle=True)
 
             # Load validation data
-            test_data = np.load(
-                f"{self.input_path}/preprocessed_1d_test_{season}_data_{self.n_memb}memb.npy"
-            )
-            test_time = pd.read_csv(
-                f"{self.input_path}/dates_test_{season}_data_{self.n_memb}memb.csv"
-            )
-            testset = [
-                (torch.from_numpy(np.reshape(test_data[i], (2, 32, 32))), test_time.iloc[i, 0])
-                for i in range(len(test_data))
-            ]
+            testset = self.load_dataset("test", season)
             testloader = DataLoader(testset, batch_size=self.batch_size, shuffle=False)
 
             train_loss, valid_loss = [], []
@@ -165,6 +147,21 @@ class TorchTrainer(Trainer):
         # emissions = tracker.stop()
         # print(f"Emissions from this training run: {emissions:.5f} kg CO2eq")
 
+    def load_dataset(self, mode, season):
+        """Load dataset with given mode (train/test/proj) and season"""
+        data = np.load(
+            f"{self.input_path}/preprocessed_1d_{mode}_{season}_data_{self.n_memb}memb.npy"
+        )
+        time = pd.read_csv(
+            f"{self.input_path}/dates_{mode}_{season}_data_{self.n_memb}memb.csv"
+        )
+        dataset = [
+            (torch.from_numpy(np.reshape(data[i], (2, 32, 32))), time.iloc[i, 0])
+            for i in range(len(data))
+        ]
+        return dataset
+
+
 
 class TorchInference(Trainer):
     def __init__(
@@ -212,16 +209,7 @@ class TorchInference(Trainer):
             if self.on_train_test:
 
                 # Load training data
-                train_data = np.load(
-                    f"{self.input_path}/preprocessed_1d_train_{season}_data_{self.n_memb}memb.npy"
-                )
-                train_time = pd.read_csv(
-                    f"{self.input_path}/dates_train_{season}_data_{self.n_memb}memb.csv"
-                )
-                trainset = [
-                    (torch.from_numpy(np.reshape(train_data[i], (2, 32, 32))), train_time.iloc[i, 0])
-                    for i in range(len(train_data))
-                ]
+                trainset = self.load_dataset("train", season)
                 dataloader = DataLoader(trainset, batch_size=1, shuffle=False)
                 # Run evaluation
                 val_loss, recon_images, losses, pixel_wise_losses = evaluate(
@@ -231,17 +219,7 @@ class TorchInference(Trainer):
                 pd.DataFrame(losses).to_csv(
                     f"{self.output_path}/train_loss_indiv_{season}_1d_{self.n_memb}memb.csv"
                 )
-
-                test_data = np.load(
-                    f"{self.input_path}/preprocessed_1d_test_{season}_data_{self.n_memb}memb.npy"
-                )
-                test_time = pd.read_csv(
-                    f"{self.input_path}/dates_test_{season}_data_{self.n_memb}memb.csv"
-                )
-                testset = [
-                    (torch.from_numpy(np.reshape(test_data[i], (2, 32, 32))), test_time.iloc[i, 0])
-                    for i in range(len(test_data))
-                ]
+                testset = self.load_dataset("test", season)
                 dataloader = DataLoader(testset, batch_size=1, shuffle=False)
                 # Run evaluation
                 val_loss, recon_images, losses, pixel_wise_losses = evaluate(
@@ -256,18 +234,7 @@ class TorchInference(Trainer):
                 for scenario in self.scenarios:
 
                     # Load projection data (future climate data)
-                    projection_data = np.load(
-                        f"{self.input_path}/preprocessed_1d_proj{scenario}_{season}_data_{self.n_memb}memb.npy"
-                    )
-                    print(projection_data.shape)
-                    projection_time = pd.read_csv(
-                        f"{self.input_path}/dates_proj_{season}_data_{self.n_memb}memb.csv"
-                    )
-                    n_proj = len(projection_data)
-                    projset = [
-                        (torch.from_numpy(np.reshape(projection_data[i], (2, 32, 32))), projection_time.iloc[i, 0])
-                        for i in range(n_proj)
-                    ]
+                    projset = self.load_dataset("proj", season, scenario)
                     dataloader = DataLoader(projset, batch_size=1, shuffle=False)
                     # Run evaluation
                     val_loss, recon_images, losses, pixel_wise_losses = evaluate(
@@ -288,3 +255,17 @@ class TorchInference(Trainer):
                     save_loss_plot([], losses, season, self.output_path)
                     print("val_loss = ", val_loss)
             print(f"Saved inference results for {season}")
+
+    def load_dataset(self, mode, season, scenario=""):
+        """Load dataset with given mode (train/test/proj) and season"""
+        data = np.load(
+            f"{self.input_path}/preprocessed_1d_{mode}{scenario}_{season}_data_{self.n_memb}memb.npy"
+        )
+        time = pd.read_csv(
+            f"{self.input_path}/dates_{mode}_{season}_data_{self.n_memb}memb.csv"
+        )
+        dataset = [
+            (torch.from_numpy(np.reshape(data[i], (2, 32, 32))), time.iloc[i, 0])
+            for i in range(len(data))
+        ]
+        return dataset

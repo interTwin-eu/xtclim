@@ -1,6 +1,8 @@
 #
 # docker run -it --mount src=`pwd`/'itwinai',target=/itwinai,type=bind xtclim
 #
+USER appuser
+HEALTHCHECK CMD curl --fail http://localhost:8000/health || exit 1
 
 FROM buildpack-deps:bookworm
 
