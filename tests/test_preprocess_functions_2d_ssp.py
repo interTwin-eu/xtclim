@@ -25,5 +25,5 @@ def test_preprocess_data_synthetic(tmp_path):
     )
 
     # Run and check output
-    step()
+    step.execute()
     assert any(tmp_path.glob("*.nc"))

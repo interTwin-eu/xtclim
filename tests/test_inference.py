@@ -25,7 +25,7 @@ def test_torch_inference_synthetic(tmp_path):
     )
 
     # Run
-    infer()
+    infer.execute()
 
     # Check output
     assert any(tmp_path.glob("*.nc"))

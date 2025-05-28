@@ -17,7 +17,7 @@ def test_split_preprocessed_data_synthetic(tmp_path):
     )
 
     # Run
-    step()
+    step.execute()  
 
     # Check if files were created
     files = list(tmp_path.glob("*.nc"))

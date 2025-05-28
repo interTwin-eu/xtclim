@@ -29,7 +29,7 @@ def test_torch_trainer_synthetic(tmp_path):
     )
 
     # Run
-    trainer()
+    trainer.execute
 
     # Check if model output or logs exist
     assert any(tmp_path.glob("*"))
