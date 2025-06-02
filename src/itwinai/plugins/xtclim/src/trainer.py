@@ -162,7 +162,6 @@ class TorchTrainer(Trainer):
         return dataset
 
 
-
 class TorchInference(Trainer):
     def __init__(
         self,
