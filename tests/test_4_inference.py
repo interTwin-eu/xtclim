@@ -1,10 +1,9 @@
 import numpy as np
 import xarray as xr
-
 from itwinai.plugins.xtclim.src.trainer import TorchInference
 
 
-def test_torch_inference_synthetic(tmp_path):
+def test_torch_inference_synthetic(tmp_path=""):
     # Simulated inference input
     data = xr.DataArray(np.random.rand(4, 1, 2, 2), dims=["time", "channel", "lat", "lon"])
     ds = xr.Dataset({"tas": data})

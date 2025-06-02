@@ -2,7 +2,7 @@ import numpy as np
 import xarray as xr
 from itwinai.plugins.xtclim.preprocessing.preprocess_functions_2d_ssp import PreprocessData
 
-def test_preprocess_data_synthetic(tmp_path):
+def test_preprocess_data_synthetic(tmp_path=""):
     # Create synthetic input NetCDF
     data = xr.DataArray(np.random.rand(3, 2, 2), dims=["time", "lat", "lon"])
     ds = xr.Dataset({"tas": data})

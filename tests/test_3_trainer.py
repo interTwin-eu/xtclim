@@ -1,8 +1,8 @@
-import xarray as xr
 import numpy as np
+import xarray as xr
 from itwinai.plugins.xtclim.src.trainer import TorchTrainer
 
-def test_torch_trainer_synthetic(tmp_path):
+def test_torch_trainer_synthetic(tmp_path=""):
     # Simulate preprocessed input
     data = xr.DataArray(np.random.rand(4, 1, 2, 2), dims=["time", "channel", "lat", "lon"])
     ds = xr.Dataset({"tas": data})
