@@ -1,7 +1,7 @@
 def test_torch_trainer_synthetic(tmp_path):
     import xarray as xr
     import numpy as np
-    from itwinai.plugins.xtclim.model.trainer import TorchTrainer
+    from itwinai.plugins.xtclim.src.trainer import TorchTrainer
 
     # Données prétraitées synthétiques
     data = xr.DataArray(np.random.rand(4, 1, 2, 2), dims=["time", "channel", "lat", "lon"])

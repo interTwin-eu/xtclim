@@ -1,7 +1,7 @@
 def test_torch_inference_synthetic(tmp_path):
     import xarray as xr
     import numpy as np
-    from itwinai.plugins.xtclim.model.inference import TorchInference
+    from itwinai.plugins.xtclim.src.trainer import TorchInference
 
     # Données pour l'inférence
     data = xr.DataArray(np.random.rand(4, 1, 2, 2), dims=["time", "channel", "lat", "lon"])
