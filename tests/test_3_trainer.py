@@ -5,7 +5,7 @@ import torch
 
 from itwinai.plugins.xtclim.src.trainer import TorchTrainer
 
-def test_generate_mock_data(path: str, seasons, modes=["train", "test"], n_memb=1, num_samples=20):
+def generate_mock_data(path: str, seasons, modes=["train", "test"], n_memb=1, num_samples=20):
     os.makedirs(path, exist_ok=True)
     for season in seasons:
         for mode in modes:
@@ -15,9 +15,10 @@ def test_generate_mock_data(path: str, seasons, modes=["train", "test"], n_memb=
 
             # Dates fictives
             dates = pd.date_range("2000-01-01", periods=num_samples, freq="D")
-            pd.DataFrame(dates.strftime("%Y-%m-%d")).to_csv(
-                f"{path}/dates_{mode}_{season}_data_{n_memb}memb.csv", index=False, header=False
+            pd.DataFrame({"date": dates.strftime("%Y-%m-%d")}).to_csv(
+                f"{path}/dates_{mode}_{season}_data_{n_memb}memb.csv", index=False
             )
+
 
 def test_trainer():
     input_path = "mock_inputs"
@@ -25,7 +26,7 @@ def test_trainer():
     seasons = ["winter", "spring"]
 
     # 1. Génère des données factices
-    test_generate_mock_data(input_path, seasons)
+    generate_mock_data(input_path, seasons)
 
     # 2. Lance le trainer
     trainer = TorchTrainer(
