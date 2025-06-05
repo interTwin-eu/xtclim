@@ -33,7 +33,7 @@ def test_preprocess_data_synthetic(tmp_path):
         input_path=str(input_dir),
         output_path=str(tmp_path),
         histo_extr=str(input_file),
-        landsea_mask=str(mask),
+        landsea_mask="landsea_mask.nc",
         min_lon=0,
         max_lon=1,
         min_lat=0,
