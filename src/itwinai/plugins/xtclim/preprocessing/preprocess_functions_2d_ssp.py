@@ -207,11 +207,12 @@ class PreprocessData(DataGetter):
     def execute(self):
         # #### 1. Load Data to xarrays
         atmosfield = []
-        for f in self.histo_extr:
-            print(f)
-            # Historical Datasets
-            # regrouped by climate variable
-            atmosfield.append(xr.open_dataset(self.dataset_root + "/" + f))
+    
+        for f in os.listdir(self.dataset_root):
+            full_path = os.path.join(self.dataset_root, f)
+            if os.path.isfile(full_path) and f.endswith(".nc"):
+                atmosfield.append(xr.open_dataset(full_path))
+
         atmosfield_histo = xr.concat(atmosfield, "time")
         # Load land-sea mask data
         sftlf = xr.open_dataset(
