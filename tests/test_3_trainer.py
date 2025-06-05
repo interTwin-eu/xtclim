@@ -28,6 +28,9 @@ def test_trainer():
     # 1. Génère des données factices
     generate_mock_data(input_path, seasons)
 
+    # ✅ Crée le dossier de sortie s'il n'existe pas
+    os.makedirs(output_path, exist_ok=True)
+
     # 2. Lance le trainer
     trainer = TorchTrainer(
         input_path=input_path,
@@ -46,4 +49,5 @@ def test_trainer():
         image_channels=2,
         latent_dim=16
     )
+
     trainer.execute()
