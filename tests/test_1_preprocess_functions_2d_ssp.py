@@ -25,6 +25,7 @@ def test_preprocess_data_synthetic(tmp_path):
 
     # Fichier SSP dans dataset_root (on donne le nom exact "ssp1.nc")
     ssp_file = dataset_root / "ssp1.nc"
+    ds.attrs["variable_id"] = "tas"
     ds.to_netcdf(ssp_file)
 
     # Construire le dict scenario_extr attendu par PreprocessData
