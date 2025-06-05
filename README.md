@@ -28,7 +28,6 @@ The more unusual an image (anomaly), the higher error.
 In the preprocessing folder, the `preprocess_functions_2d_ssp.py` class loads
 NetCDF files from a `data` folder, which has to be specified in `dataset_root`
 in the config file `config.yaml` (please change the location).
-The data can be found [here](https://b2drop.eudat.eu/s/rtAadDNYDWBkxjJ).
 The given class normalizes,and adjusts the data for the network.
 The function `preprocess_2d_seasons.py` splits the data into
 seasonal files. Preprocessed data is stored in the `input` folder.
