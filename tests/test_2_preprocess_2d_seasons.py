@@ -42,7 +42,8 @@ def test_split_preprocessed_data(tmp_path):
     # === Vérifier que les fichiers ont été créés
     for dataset_type in ["train", "test", "proj126"]:
         for season in ["winter", "spring", "summer", "autumn"]:
-            npy_file = input_dir / f"preprocessed_1d_{dataset_type}_data_{n_memb}memb.npy"
+            npy_file = input_dir / f"preprocessed_1d_{dataset_type}_{season}_data_{n_memb}memb.npy"
             csv_file = input_dir / f"dates_{dataset_type}_{season}_data_{n_memb}memb.csv"
             assert npy_file.exists(), f"Manquant : {npy_file}"
             assert csv_file.exists(), f"Manquant : {csv_file}"
+
