@@ -19,7 +19,10 @@ def test_preprocess_data_synthetic(tmp_path):
 
     # Fichiers requis
     mask = dataset_root / "landsea_mask.nc"
-    ds["tas"].isel(time=0).to_dataset(name="mask").to_netcdf(mask)
+    mask_ds = ds["tas"].isel(time=0).to_dataset(name="mask")
+    mask_ds.attrs["variable_id"] = "mask"
+    mask_ds.to_netcdf(mask)
+
     extr = tmp_path / "scenario_extr.nc"
     ds.to_netcdf(extr)
 
