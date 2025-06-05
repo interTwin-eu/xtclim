@@ -18,9 +18,9 @@ def test_preprocess_data_synthetic(tmp_path):
     ds.to_netcdf(input_file)
 
     # Fichiers requis
-    mask = tmp_path / "landsea_mask.nc"
-    extr = tmp_path / "scenario_extr.nc"
+    mask = dataset_root / "landsea_mask.nc"
     ds["tas"].isel(time=0).to_dataset(name="mask").to_netcdf(mask)
+    extr = tmp_path / "scenario_extr.nc"
     ds.to_netcdf(extr)
 
     # Fichier SSP dans dataset_root
