@@ -12,6 +12,29 @@ def test_split_preprocessed_data(tmp_path):
     n_memb = 1
     scenarios = ["126"]
 
+    # === Données simulées : 3 années = 3 * 365 = 1095 jours
+    n_days = 3 * 365
+    height, width = 2, 2  # image shape
+
+    # === Données train/test/proj (prétraitées)
+    train_images = np.random.rand(n_days, height, width).astype("float32")
+    test_images = np.random.rand(n_days, height, width).astype("float32")
+    proj_images = np.random.rand(n_days, height, width).astype("float32")
+
+    np.save(input_dir / "preprocessed_2d_train_data_allssp.npy", train_images)
+    np.save(input_dir / "preprocessed_2d_test_data_allssp.npy", test_images)
+    np.save(input_dir / "preprocessed_2d_proj126_data_allssp.npy", proj_images)
+
+    # === Dates : on génère une DataFrame avec des dates journalières
+    base_dates = pd.date_range("2000-01-01", periods=n_days)
+    train_time = pd.DataFrame({"index": range(n_days), "date": base_dates})
+    test_time = pd.DataFrame({"index": range(n_days), "date": base_dates})
+    proj_time = pd.DataFrame({"index": range(n_days), "date": base_dates})
+
+    train_time.to_csv(input_dir / "dates_train_data.csv", index=False)
+    test_time.to_csv(input_dir / "dates_test_data.csv", index=False)
+    proj_time.to_csv(input_dir / "dates_proj126_data.csv", index=False)
+
     # === Exécuter l'étape
     step = SplitPreprocessedData(input_path=input_path, scenarios=scenarios, n_memb=n_memb)
     step.execute()
