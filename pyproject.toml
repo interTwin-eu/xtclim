@@ -79,10 +79,3 @@ fail_under = 70
 [tool.coverage.xml]
 output = "coverage.xml"
 
-[tool.flake8]
-extend-ignore = ["E203", "W503"]
-max-line-length = 120
-exclude = [
-    ".git", "__pycache__", "docs/conf.py", "use-cases", "tutorials",
-    "tests", "old", "build", "dist", ".venv*", "envAI*", "env-files", ".vscode"
-]
