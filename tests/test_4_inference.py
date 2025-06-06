@@ -3,27 +3,27 @@ import numpy as np
 import pandas as pd
 import torch
 
-from itwinai.plugins.xtclim.src.trainer import TorchTrainer
-
-def generate_mock_data(path: str, seasons, modes=["train", "test"], n_memb=1, num_samples=20):
-    os.makedirs(path, exist_ok=True)
-    for season in seasons:
-        for mode in modes:
-            # Données aléatoires (2, 32, 32) -> aplaties
-            data = np.random.rand(num_samples, 2 * 32 * 32).astype(np.float32)
-            np.save(f"{path}/preprocessed_1d_{mode}_{season}_data_{n_memb}memb.npy", data)
-
-            # Dates fictives
-            dates = pd.date_range("2000-01-01", periods=num_samples, freq="D")
-            pd.DataFrame({"date": dates.strftime("%Y-%m-%d")}).to_csv(
-                f"{path}/dates_{mode}_{season}_data_{n_memb}memb.csv", index=False
-            )
-
+from itwinai.plugins.xtclim.src.model import ConvVAE
+from itwinai.plugins.xtclim.src.trainer import TorchTrainer, TorchInference
 
 def test_trainer():
     input_path = "mock_inputs"
     output_path = "mock_outputs"
     seasons = ["winter", "spring"]
+
+    def generate_mock_data(path: str, seasons, modes=["train", "test"], n_memb=1, num_samples=20):
+        os.makedirs(path, exist_ok=True)
+        for season in seasons:
+            for mode in modes:
+                # Données aléatoires (2, 32, 32) -> aplaties
+                data = np.random.rand(num_samples, 2 * 32 * 32).astype(np.float32)
+                np.save(f"{path}/preprocessed_1d_{mode}_{season}_data_{n_memb}memb.npy", data)
+
+                # Dates fictives
+                dates = pd.date_range("2000-01-01", periods=num_samples, freq="D")
+                pd.DataFrame({"date": dates.strftime("%Y-%m-%d")}).to_csv(
+                    f"{path}/dates_{mode}_{season}_data_{n_memb}memb.csv", index=False
+                )
 
     # 1. Génère des données factices
     generate_mock_data(input_path, seasons)
@@ -53,24 +53,6 @@ def test_trainer():
     trainer.execute()
 
 
-from itwinai.plugins.xtclim.src.trainer import TorchInference
-from itwinai.plugins.xtclim.src.model import ConvVAE
-
-
-def generate_mock_data(path: str, seasons, scenarios, n_memb=1, num_samples=20):
-    os.makedirs(path, exist_ok=True)
-    for season in seasons:
-        for scenario in scenarios:
-            # Données aléatoires (2, 32, 32) -> aplaties
-            data = np.random.rand(num_samples, 2 * 32 * 32).astype(np.float32)
-            np.save(f"{path}/preprocessed_1d_proj{scenario}_{season}_data_{n_memb}memb.npy", data)
-
-            # Dates fictives
-            dates = pd.date_range("2000-01-01", periods=num_samples, freq="D")
-            pd.DataFrame({"date": dates.strftime("%Y-%m-%d")}).to_csv(
-                f"{path}/dates_proj_{season}_data_{n_memb}memb.csv", index=False
-            )
-
 def test_inference():
     input_path = "mock_inputs"
     output_path = "mock_outputs"
@@ -81,6 +63,21 @@ def test_inference():
     init_channels = 8
     kernel_size = 4
     image_channels = 2
+
+
+    def generate_mock_data(path: str, seasons, scenarios, n_memb=1, num_samples=20):
+        os.makedirs(path, exist_ok=True)
+        for season in seasons:
+            for scenario in scenarios:
+                # Données aléatoires (2, 32, 32) -> aplaties
+                data = np.random.rand(num_samples, 2 * 32 * 32).astype(np.float32)
+                np.save(f"{path}/preprocessed_1d_proj{scenario}_{season}_data_{n_memb}memb.npy", data)
+
+                # Dates fictives
+                dates = pd.date_range("2000-01-01", periods=num_samples, freq="D")
+                pd.DataFrame({"date": dates.strftime("%Y-%m-%d")}).to_csv(
+                    f"{path}/dates_proj_{season}_data_{n_memb}memb.csv", index=False
+                )
 
     # 1. Génère des données factices pour les projections
     generate_mock_data(input_path, seasons, scenarios, n_memb=n_memb)
