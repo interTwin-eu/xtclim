@@ -15,20 +15,20 @@ tracker = EmissionsTracker(
 tracker.start()
 """
 
+from typing import List
+
 import numpy as np
 import pandas as pd
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision.utils import make_grid
-from typing import List
-
 
 from itwinai.components import Trainer, monitor_exec
 from itwinai.plugins.xtclim.src import model
-from itwinai.plugins.xtclim.src.engine import train, validate, evaluate
+from itwinai.plugins.xtclim.src.engine import evaluate, train, validate
 from itwinai.plugins.xtclim.src.initialization import initialization
-from itwinai.plugins.xtclim.src.utils import save_loss_plot, save_image
+from itwinai.plugins.xtclim.src.utils import save_image, save_loss_plot
 
 
 class TorchTrainer(Trainer):
