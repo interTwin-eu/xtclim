@@ -202,7 +202,7 @@ class TorchInference(Trainer):
                 latent_dim=self.latent_dim,
             ).to(device)
             model_path = f"{self.output_path}/cvae_model_{season}_1d_{self.n_memb}memb.pth"
-            inference_model.load_state_dict(torch.load(model_path))
+            inference_model.load_state_dict(torch.load(model_path, weights_only=True))
             inference_model.eval()
 
             if self.on_train_test:

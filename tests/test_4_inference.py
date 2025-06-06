@@ -25,13 +25,9 @@ def test_trainer():
                     f"{path}/dates_{mode}_{season}_data_{n_memb}memb.csv", index=False
                 )
 
-    # 1. Génère des données factices
     generate_mock_data(input_path, seasons)
-
-    # ✅ Crée le dossier de sortie s'il n'existe pas
     os.makedirs(output_path, exist_ok=True)
 
-    # 2. Lance le trainer
     trainer = TorchTrainer(
         input_path=input_path,
         output_path=output_path,
@@ -49,7 +45,6 @@ def test_trainer():
         image_channels=2,
         latent_dim=16
     )
-
     trainer.execute()
 
 
@@ -63,7 +58,6 @@ def test_inference():
     init_channels = 8
     kernel_size = 4
     image_channels = 2
-
 
     def generate_mock_data(path: str, seasons, scenarios, n_memb=1, num_samples=20):
         os.makedirs(path, exist_ok=True)
@@ -79,10 +73,8 @@ def test_inference():
                     f"{path}/dates_proj_{season}_data_{n_memb}memb.csv", index=False
                 )
 
-    # 1. Génère des données factices pour les projections
     generate_mock_data(input_path, seasons, scenarios, n_memb=n_memb)
 
-    # 2. Crée un modèle simulé et sauvegarde un état entraîné factice
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     for season in seasons:
         dummy_model = ConvVAE(
@@ -93,13 +85,12 @@ def test_inference():
         ).to(device)
         torch.save(dummy_model.state_dict(), f"{output_path}/cvae_model_{season}_1d_{n_memb}memb.pth")
 
-    # 3. Exécute l'inférence
     inference = TorchInference(
         input_path=input_path,
         output_path=output_path,
         scenarios=scenarios,
         seasons=seasons,
-        on_train_test=False,  # ou True pour tester aussi sur train/test
+        on_train_test=False,
         n_memb=n_memb,
         kernel_size=kernel_size,
         init_channels=init_channels,
@@ -108,10 +99,7 @@ def test_inference():
     )
     inference.execute()
 
-    # 4. Vérifie qu’un fichier de sortie a été créé
     for season in seasons:
         for scenario in scenarios:
             expected_path = f"{output_path}/proj{scenario}_loss_indiv_{season}_1d_{n_memb}memb.csv"
             assert os.path.exists(expected_path), f"{expected_path} not found!"
-
-    print("✅ Inference test passed.")
