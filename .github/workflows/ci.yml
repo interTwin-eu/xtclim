@@ -1,4 +1,4 @@
-name: Check links and run tests with coverage
+name: CI - Lint, Tests, and Link Check
 
 on:
   push:
@@ -9,8 +9,8 @@ permissions:
   actions: read
 
 jobs:
-  check-code-and-links:
-    name: Run tests and check markdown links
+  lint-test-links:
+    name: Lint with Ruff, run tests, and check links
     runs-on: ubuntu-latest
 
     steps:
@@ -24,18 +24,23 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install project and dev dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install .
-          pip install pytest pytest-cov
+          pip install .[dev] || pip install .
+          pip install pytest pytest-cov ruff
+
+      - name: Lint with Ruff
+        run: |
+          ruff check .
+          ruff format --check .
 
       - name: Run tests with coverage
         run: |
           pytest --cov=itwinai.plugins.xtclim --cov-report=xml
           coverage report --fail-under=70
 
-      - name: Check links on new changes
+      - name: Check Markdown links
         uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           config-file: ".github/linters/mlc_config.json"
