@@ -56,6 +56,21 @@ def test_trainer():
 from itwinai.plugins.xtclim.src.trainer import TorchInference
 from itwinai.plugins.xtclim.src.model import ConvVAE
 
+
+def generate_mock_data(path: str, seasons, scenarios, n_memb=1, num_samples=20):
+    os.makedirs(path, exist_ok=True)
+    for season in seasons:
+        for scenario in scenarios:
+            # Données aléatoires (2, 32, 32) -> aplaties
+            data = np.random.rand(num_samples, 2 * 32 * 32).astype(np.float32)
+            np.save(f"{path}/preprocessed_1d_proj{scenario}_{season}_data_{n_memb}memb.npy", data)
+
+            # Dates fictives
+            dates = pd.date_range("2000-01-01", periods=num_samples, freq="D")
+            pd.DataFrame({"date": dates.strftime("%Y-%m-%d")}).to_csv(
+                f"{path}/dates_proj_{season}_data_{n_memb}memb.csv", index=False
+            )
+
 def test_inference():
     input_path = "mock_inputs"
     output_path = "mock_outputs"
@@ -68,13 +83,7 @@ def test_inference():
     image_channels = 2
 
     # 1. Génère des données factices pour les projections
-    generate_mock_data(input_path, seasons, modes=["proj"], n_memb=n_memb)
-    import shutil
-
-    shutil.copyfile(
-        "mock_inputs/preprocessed_1d_proj_winter_data_1memb.npy",
-        "mock_inputs/preprocessed_1d_projssp245_winter_data_1memb.npy"
-    )
+    generate_mock_data(input_path, seasons, scenarios, n_memb=n_memb)
 
     # 2. Crée un modèle simulé et sauvegarde un état entraîné factice
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
