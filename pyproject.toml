@@ -61,3 +61,28 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov=itwinai.plugins.xtclim --cov-report=xml"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["itwinai.plugins.xtclim"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 70
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.flake8]
+extend-ignore = ["E203", "W503"]
+max-line-length = 120
+exclude = [
+    ".git", "__pycache__", "docs/conf.py", "use-cases", "tutorials",
+    "tests", "old", "build", "dist", ".venv*", "envAI*", "env-files", ".vscode"
+]
