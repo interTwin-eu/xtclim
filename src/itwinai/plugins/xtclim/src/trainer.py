@@ -15,13 +15,14 @@ tracker = EmissionsTracker(
 tracker.start()
 """
 
-from typing import List
 import numpy as np
 import pandas as pd
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision.utils import make_grid
+from typing import List
+
 
 from itwinai.components import Trainer, monitor_exec
 from itwinai.plugins.xtclim.src import model

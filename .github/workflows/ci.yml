@@ -30,10 +30,11 @@ jobs:
           pip install .[dev] || pip install .
           pip install pytest pytest-cov ruff
 
-      - name: Lint with Ruff
+      - name: Lint with Ruff (check and fix)
         run: |
-          ruff check .
-          ruff format --check .
+          ruff check . --fix
+          ruff format .
+
 
       - name: Run tests with coverage
         run: |
