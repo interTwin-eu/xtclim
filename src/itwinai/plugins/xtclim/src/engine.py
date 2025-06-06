@@ -35,9 +35,7 @@ def train(model, dataloader, dataset, device, optimizer, criterion, beta):
     model.train()
     running_loss = 0.0
     counter = 0
-    for i, data in tqdm(
-        enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)
-    ):
+    for i, data in tqdm(enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)):
         counter += 1
         data = data[0]
         data = data.to(device)
@@ -70,9 +68,7 @@ def validate(model, dataloader, dataset, device, criterion, beta):
     running_loss = 0.0
     counter = 0
     with torch.no_grad():
-        for i, data in tqdm(
-            enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)
-        ):
+        for i, data in tqdm(enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)):
             counter += 1
             data = data[0]
             data = data.to(device)
@@ -115,9 +111,7 @@ def evaluate(
     recon_images = []
     pixel_wise_losses = []
     with torch.no_grad():
-        for i, data in tqdm(
-            enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)
-        ):
+        for i, data in tqdm(enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)):
             counter += 1
             data = data[0]
             data = data.to(device)
@@ -150,9 +144,7 @@ def latent_space_position(model, dataloader, dataset, device, criterion):
     running_loss = 0.0
     counter = 0
     with torch.no_grad():
-        for i, data in tqdm(
-            enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)
-        ):
+        for i, data in tqdm(enumerate(dataloader), total=int(len(dataset) / dataloader.batch_size)):
             counter += 1
             data = data[0]
             data = data.to(device)

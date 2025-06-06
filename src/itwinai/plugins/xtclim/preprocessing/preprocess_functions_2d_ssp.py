@@ -65,9 +65,7 @@ class PreprocessData(DataGetter):
         os.makedirs(self.input_path, exist_ok=True)
         os.makedirs(self.output_path, exist_ok=True)
 
-    def xr_to_ndarray(
-        self, xr_dset: xr.Dataset, sq_coords: dict
-    ) -> (np.ndarray, np.array, str):
+    def xr_to_ndarray(self, xr_dset: xr.Dataset, sq_coords: dict) -> (np.ndarray, np.array, str):
         """
         Converts an xarray dataset it to a cropped square ndarray,
         after ajusting the longitudes from [0,360] to [-180,180].
@@ -96,9 +94,7 @@ class PreprocessData(DataGetter):
 
         return nd_dset, time_list
 
-    def sftlf_to_ndarray(
-        self, xr_dset: xr.Dataset, sq_coords: dict
-    ) -> (np.ndarray, np.array, str):
+    def sftlf_to_ndarray(self, xr_dset: xr.Dataset, sq_coords: dict) -> (np.ndarray, np.array, str):
         """
         Converts and normalizes the land-sea mask data set
         to a cropped square ndarray,
@@ -172,9 +168,7 @@ class PreprocessData(DataGetter):
         time_list: time list to be split
         year: year where the data is to be split
         """
-        split_index = np.where(
-            time_list == cftime.DatetimeNoLeap(year, 1, 1, 0, 0, 0, 0, has_year_zero=True)
-        )[0][0]
+        split_index = np.where(time_list == cftime.DatetimeNoLeap(year, 1, 1, 0, 0, 0, 0, has_year_zero=True))[0][0]
         train_data = nd_dset[:split_index]
         test_data = nd_dset[split_index:]
         train_time = time_list[:split_index]
@@ -197,9 +191,7 @@ class PreprocessData(DataGetter):
         # combine all variables on a same period to a new 2D-array
         total_dset = np.zeros((n_t, n_lat, n_lon, 2), dtype="float32")
         total_dset[:, :, :, 0] = atmosfield_dset.reshape(n_t, n_lat, n_lon)
-        total_dset[:, :, :, 1] = np.transpose(
-            np.repeat(land_prop, n_t, axis=2), axes=[2, 0, 1]
-        )
+        total_dset[:, :, :, 1] = np.transpose(np.repeat(land_prop, n_t, axis=2), axes=[2, 0, 1])
 
         return total_dset
 
@@ -207,7 +199,7 @@ class PreprocessData(DataGetter):
     def execute(self):
         # #### 1. Load Data to xarrays
         atmosfield = []
-    
+
         for f in os.listdir(self.dataset_root):
             full_path = os.path.join(self.dataset_root, f)
             if os.path.isfile(full_path) and f.endswith(".nc"):
@@ -230,9 +222,7 @@ class PreprocessData(DataGetter):
         land_prop, lat_list, lon_list = self.sftlf_to_ndarray(sftlf, sq32_world_region)
 
         # Crop original data to chosen region
-        atmosfield_histo_nd, time_list = self.xr_to_ndarray(
-            atmosfield_histo, sq32_world_region
-        )
+        atmosfield_histo_nd, time_list = self.xr_to_ndarray(atmosfield_histo, sq32_world_region)
 
         # Compute the variable extrema over history
         atmosfield_extrema = get_extrema(atmosfield_histo_nd)
@@ -241,9 +231,7 @@ class PreprocessData(DataGetter):
         atmosfield_histo_norm = self.normalize(atmosfield_histo_nd, atmosfield_extrema)
 
         # Split data into train and test data sets
-        train_atmosfield, test_atmosfield, train_time, test_time = self.split_train_test(
-            atmosfield_histo_norm, time_list
-        )
+        train_atmosfield, test_atmosfield, train_time, test_time = self.split_train_test(atmosfield_histo_norm, time_list)
 
         # Add up split data and land-sea mask
         total_train = self.ndarray_to_2d(train_atmosfield, land_prop)
@@ -275,9 +263,7 @@ class PreprocessData(DataGetter):
             # #### 6. Step-by-Step Preprocessing
 
             # Crop original data to chosen region
-            atmosfield_proj_nd, time_proj = self.xr_to_ndarray(
-                atmosfield_proj, sq32_world_region
-            )
+            atmosfield_proj_nd, time_proj = self.xr_to_ndarray(atmosfield_proj, sq32_world_region)
 
             # Here are the results for CMCC-ESM2 (all scenarios)
             # to save time
