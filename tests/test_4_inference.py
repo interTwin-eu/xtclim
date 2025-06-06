@@ -69,6 +69,7 @@ def test_inference():
 
     # 1. Génère des données factices pour les projections
     generate_mock_data(input_path, seasons, modes=["proj"], n_memb=n_memb)
+    print("Contenu de mock_inputs :", os.listdir("mock_inputs"))
 
     # 2. Crée un modèle simulé et sauvegarde un état entraîné factice
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
