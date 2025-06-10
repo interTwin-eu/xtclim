@@ -35,6 +35,10 @@ jobs:
           ruff check . --fix
           ruff format .
 
+      - name: Lint with flake8 (SQAaaS requirement)
+        run: |
+          pip install flake8
+          flake8 .
 
       - name: Run tests with coverage
         run: |

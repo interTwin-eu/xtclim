@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from pathlib import Path
 
 from itwinai.plugins.xtclim.preprocessing.preprocess_2d_seasons import SplitPreprocessedData
 
