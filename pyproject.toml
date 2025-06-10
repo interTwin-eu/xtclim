@@ -86,5 +86,5 @@ output = "coverage.xml"
 # .flake8 (SQAaaS requirement but Ruff is better)
 [flake8]
 max-line-length = 120
-extend-ignore = E203, W503
-exclude = .git,__pycache__,docs,tests,build,dist
+extend-ignore = ["E203"]
+exclude = [".git","__pycache__","docs","tests","build","dist"]
