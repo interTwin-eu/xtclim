@@ -12,6 +12,7 @@ authors = [
     { name = "Matteo Bunino", email = "matteo.bunino@cern.ch" },
 ]
 dependencies = [
+    "numpy==1.26.4",
     "cartopy==0.24.1",
     "cftime==1.6.4.post1",
     "codecarbon==2.8.3",
@@ -23,7 +24,6 @@ dependencies = [
     "itwinai[torch]==0.3.0",
     "matplotlib==3.10.1",
     "netcdf4==1.7.2",
-    "numpy==1.26.4",
     "pandas==2.2.3",
     "ruff==0.9.6",
     "tqdm==4.67.1",
