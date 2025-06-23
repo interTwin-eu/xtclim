@@ -42,7 +42,8 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pytest --cov=itwinai.plugins.xtclim --cov-report=xml
+          pip uninstall -y itwinai
+          PYTHONPATH=. pytest --cov=itwinai.plugins.xtclim --cov-report=xml
           coverage report --fail-under=70
 
       - name: Check Markdown links

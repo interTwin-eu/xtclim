@@ -35,7 +35,7 @@ seasonal files. Preprocessed data is stored in the `input` folder.
 The file `train.py` trains the network. Caution: It will overwrite the
 weights of the network already saved in outputs (unless you change the
 path name `outputs/cvae_model_3d.pth` in the script). This file also contains
-the inference script that evaluates the network on the available 
+the inference script that evaluates the network on the available
 datasets - train, test, and projection.
 
 ## How to launch training workflow
