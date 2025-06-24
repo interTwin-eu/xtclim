@@ -7,9 +7,10 @@
 * Understand each step of a typical CI: linting, testing, link checking.
 * Explain the tools used: `pytest`, `ruff`, `flake8`, etc.
 
-## What is CI (Continuous Integration)?
+## What is CI (Continuous Integration)
 
-CI is a DevOps practice that automatically tests and validates code at each modification (push or pull request) to:
+CI is a DevOps practice that automatically tests and validates code 
+at each modification (push or pull request) to:
 
 * Detect errors early (through tests, linting, checks)
 * Maintain code quality (enforce formatting and standards)
@@ -157,7 +158,7 @@ A GitHub Action that checks for broken Markdown links in `.md` files.
 * Configured here with `.github/linters/mlc_config.json`
 * Useful to ensure documentation is clean and up to date
 
-## Why is This CI Workflow Effective?
+## Why is This CI Workflow Effective
 
 * Uses automatic linting and formatting (`ruff`)
 * Manual linting included for compatibility (`flake8`)
@@ -170,3 +171,4 @@ A GitHub Action that checks for broken Markdown links in `.md` files.
 * Add build/package steps
 * Upload test and coverage artifacts (e.g. `dist/`, `coverage.xml`)
 * Use `pre-commit` hooks to run Ruff/Flake8 locally before pushing
+* 
