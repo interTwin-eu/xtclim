@@ -1,10 +1,11 @@
+# CI Cheatsheet
+
 ## Objective
 
 * Understand the purpose of CI (Continuous Integration).
 * Learn how to create and structure a CI workflow on GitHub.
 * Understand each step of a typical CI: linting, testing, link checking.
 * Explain the tools used: `pytest`, `ruff`, `flake8`, etc.
-
 
 ## What is CI (Continuous Integration)?
 
@@ -15,7 +16,6 @@ CI is a DevOps practice that automatically tests and validates code at each modi
 * Facilitate collaboration (fast feedback and clean code)
 
 GitHub Actions allows automating these checks via workflow files defined in `.github/workflows`.
-
 
 ## Recommended Project Structure
 
@@ -34,10 +34,7 @@ my-project/
 └── requirements.txt or requirements-dev.txt
 ```
 
----
-
 ## File: `.github/workflows/ci.yml` Explained
-
 
 ```yaml
 name: CI - Lint, Tests, and Link Check
@@ -96,7 +93,6 @@ jobs:
           use-verbose-mode: "yes"
           base-branch: "main"
 ```
-
 
 ## Tools Used in the Workflow
 
@@ -161,7 +157,6 @@ A GitHub Action that checks for broken Markdown links in `.md` files.
 * Configured here with `.github/linters/mlc_config.json`
 * Useful to ensure documentation is clean and up to date
 
-
 ## Why is This CI Workflow Effective?
 
 * Uses automatic linting and formatting (`ruff`)
@@ -169,7 +164,6 @@ A GitHub Action that checks for broken Markdown links in `.md` files.
 * Enforces a minimum test coverage threshold
 * Checks documentation links
 * Compliant with SQAaaS or other quality frameworks
-
 
 ## Going Further
 
