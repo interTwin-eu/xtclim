@@ -9,7 +9,7 @@
 
 ## What is CI (Continuous Integration)
 
-CI is a DevOps practice that automatically tests and validates code 
+CI is a DevOps practice that automatically tests and validates code
 at each modification (push or pull request) to:
 
 * Detect errors early (through tests, linting, checks)
@@ -171,4 +171,3 @@ A GitHub Action that checks for broken Markdown links in `.md` files.
 * Add build/package steps
 * Upload test and coverage artifacts (e.g. `dist/`, `coverage.xml`)
 * Use `pre-commit` hooks to run Ruff/Flake8 locally before pushing
-* 
