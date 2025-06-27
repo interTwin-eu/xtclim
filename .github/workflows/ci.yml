@@ -42,7 +42,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pytest
+          pytest --cov=itwinai.plugins.xtclim --cov-report=xml
           coverage report --fail-under=70
 
       - name: Check Markdown links
